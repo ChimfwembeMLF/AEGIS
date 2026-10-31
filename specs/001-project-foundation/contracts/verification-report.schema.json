@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AEGIS Verification Report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "createdAt", "datasetVersion", "result", "checks"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "createdAt": { "type": "string", "format": "date-time" },
+    "datasetVersion": { "type": "string" },
+    "renderer": { "type": "string", "description": "GPU renderer used for responsiveness checks" },
+    "result": { "enum": ["pass", "fail", "incomplete"] },
+    "checks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "description", "target", "status"],
+        "properties": {
+          "id": { "type": "string", "examples": ["SC-002", "SC-003", "SC-004", "SC-005", "SC-009"] },
+          "description": { "type": "string" },
+          "target": { "type": "string" },
+          "measured": { "type": ["number", "null"] },
+          "unit": { "type": "string" },
+          "status": { "enum": ["pass", "fail", "not-measured"] }
+        }
+      }
+    }
+  }
+}

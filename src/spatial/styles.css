@@ -1,0 +1,212 @@
+:root {
+  --navy: #0a1430;
+  --panel: #111d40;
+  --cyan: #2fe6ff;
+  --silver: #c9d1dc;
+  --alert: #ff5d6c;
+  font-family: "Avenir Next", "Century Gothic", system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+  background: var(--navy);
+  color: var(--silver);
+}
+
+body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+}
+
+#scene {
+  position: relative;
+  min-width: 0;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--navy);
+}
+
+#scene video {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scaleX(-1);
+}
+
+/* Stays in the page unseen: Chrome throttles a video that is removed or fully hidden. */
+#scene video.camera-hidden {
+  width: 2px;
+  height: 2px;
+  opacity: 0.01;
+}
+
+#hand-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+#scene-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+#status {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100vh;
+  padding: 24px 20px;
+  overflow-y: auto;
+  background: var(--panel);
+}
+
+#status h1 {
+  margin: 0;
+  color: var(--cyan);
+  font-size: 22px;
+  letter-spacing: 0.14em;
+}
+
+#status h2 {
+  margin: 0 0 8px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+#status dl {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 12px;
+  margin: 0;
+  font-size: 14px;
+}
+
+#status dt {
+  color: var(--cyan);
+}
+
+#status dd {
+  margin: 0;
+}
+
+.status-message {
+  min-height: 1.3em;
+  margin: 0;
+  font-size: 15px;
+}
+
+.status-message[data-kind='not-understood'],
+.status-message[data-kind='poor-tracking'] {
+  color: var(--alert);
+}
+
+#capture-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 8px;
+  color: var(--alert);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+#capture-indicator[hidden] {
+  display: none;
+}
+
+#capture-indicator::before {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--alert);
+  content: '';
+}
+
+#camera-toggle,
+#view-toggle {
+  min-height: 40px;
+  margin-top: 10px;
+  margin-right: 6px;
+  padding: 8px 16px;
+  border: 1px solid var(--cyan);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--cyan);
+  font: inherit;
+  cursor: pointer;
+}
+
+#camera-toggle:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+#recording-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 14px;
+}
+
+#recording-panel p {
+  margin: 0;
+}
+
+#recording-panel input:not([type='checkbox']) {
+  width: 100%;
+  min-height: 40px;
+  padding: 8px;
+  border: 1px solid var(--silver);
+  border-radius: 6px;
+  background: var(--navy);
+  color: var(--silver);
+  font: inherit;
+}
+
+#recording-panel button {
+  min-height: 40px;
+  border: 1px solid var(--cyan);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--cyan);
+  font: inherit;
+}
+
+#recording-panel button:disabled {
+  opacity: 0.5;
+}
+
+@media (max-width: 720px) {
+  body {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: 55vh auto;
+  }
+
+  #scene {
+    height: 55vh;
+  }
+
+  #status {
+    height: auto;
+    padding: 16px;
+  }
+}

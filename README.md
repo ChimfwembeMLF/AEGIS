@@ -94,3 +94,54 @@ Establish these naming conventions from the beginning:
 **One thing I'd preserve:** AEGIS should be the platform, not the assistant's name. The conversational AI can have its own identity later.
 
 That gives you room to build an entire ecosystem around AEGIS.
+
+---
+
+## Getting started
+
+AEGIS runs locally in Chrome. Your camera view and hand points appear behind the 3D object, on your
+screen only. Nothing from your camera is saved or leaves your device.
+
+**You need:** Node 20.19 or later, Yarn 4, Chrome with hardware acceleration on, and a webcam for
+gestures.
+Tested with Chrome 150 on an Intel MacBook Pro running macOS 12.7.
+
+```sh
+yarn install
+yarn setup:model       # downloads the hand-tracking model once
+yarn dev               # then open the localhost address it prints
+```
+
+Allow camera access when Chrome asks. If you skip the camera, the keyboard controls everything.
+
+| Gesture         | Effect                   | Key        |
+| --------------- | ------------------------ | ---------- |
+| Pinch and drag  | Move the object          | Arrow keys |
+| Pinch and twist | Rotate the object        | `Q` / `E`  |
+| Open palm (1s)  | Reset the object         | `R`        |
+|                 | Stop or restart camera   | `C`        |
+|                 | Hide or show camera view | `V`        |
+
+## Checking that it works
+
+| Command          | What it checks                                                | Camera needed |
+| ---------------- | ------------------------------------------------------------- | ------------- |
+| `yarn test`      | Contracts, gesture rules and Core decisions                   | No            |
+| `yarn e2e`       | App behaviour, camera failures and privacy, in Chrome         | No            |
+| `yarn verify`    | Accuracy and responsiveness against targets, with a report    | No            |
+
+`yarn verify` opens a visible Chrome window, because a headless browser has no real GPU. It
+reports `incomplete` until the evaluation dataset and benchmark photo exist. To create them, see
+[quickstart.md](specs/001-project-foundation/quickstart.md).
+
+## Project layout
+
+| Folder         | Module        | Responsibility                                  |
+| -------------- | ------------- | ----------------------------------------------- |
+| `src/vision`   | AEGIS Vision  | Camera, hand tracking, live and replayed input  |
+| `src/motion`   | AEGIS Motion  | Gesture rules and confidence                    |
+| `src/core`     | AEGIS Core    | Decisions, keyboard, capture state, recording   |
+| `src/spatial`  | AEGIS Spatial | 3D scene and on-screen status                   |
+
+Modules talk only through `src/contracts`. Project rules are in
+[the constitution](.specify/memory/constitution.md).

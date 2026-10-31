@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AEGIS Recorded Session",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schemaVersion", "modelSha256", "subjectId", "consent", "recordedOn", "frames", "labels"],
+  "properties": {
+    "schemaVersion": { "const": 1 },
+    "modelSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "subjectId": { "type": "string", "pattern": "^[a-z0-9-]{1,32}$" },
+    "consent": { "const": true },
+    "recordedOn": { "type": "string", "format": "date" },
+    "frames": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/handFrame" } },
+    "labels": { "type": "array", "items": { "$ref": "#/$defs/label" } }
+  },
+  "$defs": {
+    "handFrame": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["timestampMs", "hands"],
+      "properties": {
+        "timestampMs": { "type": "number", "minimum": 0 },
+        "hands": { "type": "array", "items": { "$ref": "#/$defs/trackedHand" } }
+      }
+    },
+    "trackedHand": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["handId", "handedness", "trackingScore", "landmarks"],
+      "properties": {
+        "handId": { "type": "string" },
+        "handedness": { "enum": ["left", "right"] },
+        "trackingScore": { "type": "number", "minimum": 0, "maximum": 1 },
+        "landmarks": {
+          "type": "array",
+          "minItems": 21,
+          "maxItems": 21,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["x", "y", "z"],
+            "properties": {
+              "x": { "type": "number" },
+              "y": { "type": "number" },
+              "z": { "type": "number" }
+            }
+          }
+        }
+      }
+    },
+    "label": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["gesture", "startMs", "endMs"],
+      "properties": {
+        "gesture": { "enum": ["pinch-drag", "pinch-twist", "open-palm", "none"] },
+        "startMs": { "type": "number", "minimum": 0 },
+        "endMs": { "type": "number", "minimum": 0 }
+      }
+    }
+  }
+}
