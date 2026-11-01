@@ -34,6 +34,11 @@ function section(title: string, ...content: HTMLElement[]): HTMLElement {
   return element;
 }
 
+function cameraButtonLabel(state: CaptureState): string {
+  if (state === 'active' || state === 'starting') return 'Stop camera';
+  return state === 'unavailable' ? 'Try camera again' : 'Start camera';
+}
+
 export class StatusPanel {
   private readonly gesture = document.createElement('p');
   private readonly camera = document.createElement('p');
@@ -90,7 +95,6 @@ export class StatusPanel {
 
   private showCaptureState(state: CaptureState): void {
     this.indicator.hidden = state !== 'active';
-    const stoppable = state === 'active' || state === 'starting';
-    this.cameraToggle.textContent = stoppable ? 'Stop camera' : 'Start camera';
+    this.cameraToggle.textContent = cameraButtonLabel(state);
   }
 }

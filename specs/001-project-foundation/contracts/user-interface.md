@@ -31,16 +31,19 @@ unavailable, the scene is plain navy with no view or points.
 - The 3D scene with the object, over the camera view while the camera is on.
 - Keyboard controls and gesture hints.
 - Camera status, with the capture indicator while the camera is on.
-- A stop or restart camera button, and a hide or show camera view button.
+- A stop or restart camera button, labelled Try camera again after a failure, and a hide or show
+  camera view button.
 - The last recognised gesture, or "Gesture not understood".
 
 ## Messages
 
 | Situation            | Message                                                        |
 | -------------------- | -------------------------------------------------------------- |
-| No camera            | No camera found. You can use the keyboard.                     |
+| No camera            | No camera found. If this device has one, quit Chrome fully and reopen it, or use the keyboard. |
 | Camera busy          | Your camera is being used by another app. You can use the keyboard. |
-| Permission denied    | Camera access is off. Allow it in your browser, or use the keyboard. |
+| Permission denied    | Camera access is off. Press Try camera again and choose Allow. If nothing appears, use the camera icon in Chrome's address bar, or use the keyboard. |
+| Camera starting      | Starting camera. If your browser asks, choose Allow.           |
+| A retry fails        | Try N failed, followed by the message for that failure         |
 | Camera lost          | Camera disconnected. You can continue with the keyboard.       |
 | Tracking failed      | Hand tracking could not start. You can use the keyboard.       |
 | Camera stopped       | Camera off. Press C to turn it on.                             |

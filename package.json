@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@mediapipe/tasks-vision": "1.2.0",
+    "onnxruntime-web": "1.30.0",
     "three": "0.187.0"
   },
   "devDependencies": {

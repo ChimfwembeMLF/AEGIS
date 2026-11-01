@@ -1,7 +1,7 @@
 import type { CameraDisplay, Pose, SceneCommands } from './contracts';
 import { interactionSettings } from './contracts/interaction-settings';
 import { CameraViewControl } from './core/camera-view-control';
-import { captureFeedback } from './core/capture-feedback';
+import { CaptureFeedback } from './core/capture-feedback';
 import { CaptureToggle } from './core/capture-toggle';
 import { GestureControl } from './core/gesture-control';
 import { InteractionEngine } from './core/interaction-engine';
@@ -80,7 +80,8 @@ function runKeyboard(nowMs: number): void {
 }
 requestAnimationFrame(runKeyboard);
 
-handFrames.onStateChange((session) => sceneCommands.showFeedback(captureFeedback(session)));
+const captureFeedback = new CaptureFeedback();
+handFrames.onStateChange((session) => sceneCommands.showFeedback(captureFeedback.describe(session)));
 
 if (params.has('record')) {
   const recorder = new SessionRecorder(handFrames, () => new Date().toISOString().slice(0, 10));

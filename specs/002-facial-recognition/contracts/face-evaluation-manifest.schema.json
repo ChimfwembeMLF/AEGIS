@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Face Evaluation Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["datasetVersion", "recognitionModelSha256", "detectionModelSha256", "participants"],
+  "properties": {
+    "datasetVersion": { "type": "string", "pattern": "^v[0-9]+$" },
+    "recognitionModelSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "detectionModelSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "participants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["participantId", "consentedOn", "role", "fileSha256"],
+        "properties": {
+          "participantId": { "type": "string", "pattern": "^[a-z0-9-]{1,32}$" },
+          "consentedOn": { "type": "string", "format": "date" },
+          "role": { "enum": ["enrolled", "unknown"] },
+          "fileSha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+          "selfDeclaredGroups": {
+            "description": "Optional and chosen by the participant. AEGIS never infers these.",
+            "type": "array",
+            "items": { "type": "string", "maxLength": 40 }
+          }
+        }
+      }
+    }
+  }
+}

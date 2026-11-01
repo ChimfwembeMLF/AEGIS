@@ -49,7 +49,8 @@ export class Camera implements CaptureControl, CameraFeed {
     this.report({ state: 'starting' });
     try {
       await prepare();
-    } catch {
+    } catch (error) {
+      console.warn('Hand tracking failed to start:', error);
       if (attempt === this.attempt) this.fail('tracking-failed');
       return;
     }
@@ -73,6 +74,7 @@ export class Camera implements CaptureControl, CameraFeed {
       this.report({ state: 'active' });
       await this.video.play();
     } catch (error) {
+      console.warn('Camera failed to start:', error);
       if (attempt === this.attempt) this.fail(failureReason(error));
     }
   }

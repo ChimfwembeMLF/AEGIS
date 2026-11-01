@@ -5,7 +5,7 @@ const pose = async (page: Page) =>
 
 test('all object keys work with camera access denied', async ({ page }) => {
   await page.goto('/');
-  await expect(page.getByText('Camera access is off. Allow it in your browser, or use the keyboard.')).toBeVisible();
+  await expect(page.getByText('Camera access is off.')).toBeVisible();
 
   await page.keyboard.down('ArrowRight');
   await expect.poll(async () => (await pose(page)).position.x).toBeGreaterThan(0.2);
@@ -23,6 +23,20 @@ test('all object keys work with camera access denied', async ({ page }) => {
   await expect.poll(() => pose(page)).toEqual({ position: { x: 0, y: 0 }, rotation: 0 });
 });
 
+test('each press of the button visibly responds while camera access is refused', async ({ page }) => {
+  await page.goto('/');
+  const toggle = page.locator('#camera-toggle');
+  const status = page.locator('#camera-status');
+  await expect(toggle).toHaveText('Try camera again', { timeout: 20000 });
+  await expect(status).toContainText('Press Try camera again and choose Allow.');
+
+  await toggle.click();
+  await expect(status).toContainText('Try 2 failed.');
+  await toggle.click();
+  await expect(status).toContainText('Try 3 failed.');
+  await expect(toggle).toHaveText('Try camera again');
+});
+
 test('a device with no camera opens the scene and explains why', async ({ page }) => {
   await page.addInitScript(() => {
     navigator.mediaDevices.getUserMedia = () =>
@@ -30,7 +44,9 @@ test('a device with no camera opens the scene and explains why', async ({ page }
   });
   await page.goto('/');
   await expect(page.locator('#scene-canvas')).toBeVisible();
-  await expect(page.getByText('No camera found. You can use the keyboard.')).toBeVisible();
+  await expect(
+    page.getByText('No camera found. If this device has one, quit Chrome fully and reopen it, or use the keyboard.'),
+  ).toBeVisible();
 });
 
 test('a camera in use by another app is explained', async ({ page }) => {

@@ -32,7 +32,9 @@ test.beforeEach(async ({ page }) => {
 
 test('the person sees that the camera is starting while tracking loads', async ({ page }) => {
   // Short limits: these must already be true while tracking loads, not become true later.
-  await expect(page.locator('#camera-status')).toHaveText('Starting camera...', { timeout: 500 });
+  await expect(page.locator('#camera-status')).toHaveText('Starting camera. If your browser asks, choose Allow.', {
+    timeout: 500,
+  });
   await expect(page.locator('#camera-toggle')).toHaveText('Stop camera', { timeout: 500 });
   await expect(page.locator('#camera-toggle')).toBeEnabled({ timeout: 500 });
 });
